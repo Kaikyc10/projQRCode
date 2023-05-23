@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">projQRCode</string>
+    <string name="qr_code_image">Descrição do QR Code</string>
+    <string name="foto_image">Descrição da Foto</string>
+    <string name="location_placeholder">Localização do usuário</string>
+</resources>
