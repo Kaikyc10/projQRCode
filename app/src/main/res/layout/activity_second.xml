@@ -1,9 +1,10 @@
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <ImageView
@@ -18,9 +19,9 @@
         android:id="@+id/raTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
         android:layout_marginTop="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
         tools:text="RA: 123456" />
 
 

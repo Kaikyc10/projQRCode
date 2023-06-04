@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.android.synthetic.main.activity_second.*
+import androidx.constraintlayout.widget.ConstraintLayout
+
 
 class SecondActivity : AppCompatActivity() {
 
@@ -55,7 +57,7 @@ class SecondActivity : AppCompatActivity() {
         val locationTextView = findViewById<TextView>(R.id.locationTextView)
 
 // Exibir a imagem do QR Code lido
-       // qrCodeImageView.setImageBitmap(submissionData?.qrCodeBitmap)
+        qrCodeImageView.setImageBitmap(submissionData?.qrCodeBitmap)
 
 // Exibir a foto tirada pelo usuário
         photoImageView.setImageBitmap(submissionData?.photoBitmap)

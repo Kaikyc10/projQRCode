@@ -1,5 +1,6 @@
 package com.example.projqrcode
 
+
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.constraintlayout.widget.ConstraintLayout
 
 class MainActivity : AppCompatActivity() {
     private lateinit var qrCodeImageView: ImageView
@@ -50,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             if (qrCodeMessage.isNotEmpty()) {
                 takePhoto(qrCodeMessage)
             } else {
-                Toast.makeText(this, "Scan a QR Code first", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Escaneie o QR Code primeiro", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -102,13 +104,12 @@ class MainActivity : AppCompatActivity() {
                 if (location != null) {
                     currentLocation = LatLng(location.latitude, location.longitude)
                 } else {
-                    Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Localização não disponível", Toast.LENGTH_SHORT).show()
                 }
             })
     }
 
     private fun scanQRCode() {
-
         val integrator = IntentIntegrator(this)
         integrator.setOrientationLocked(false)
         integrator.initiateScan()
@@ -120,16 +121,42 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun submitData() {
+        val qrCodeMessage = qrCodeTextView.text.toString()
+        val ra = raEditText.text.toString()
+
+        if (qrCodeMessage.isEmpty()) {
+            Toast.makeText(this, "Complete todos os procedimentos", Toast.LENGTH_SHORT).show()
+            return
+        }
+        else
+            if (ra.isEmpty()){
+                Toast.makeText(this, "Digite o RA", Toast.LENGTH_SHORT).show()
+                return
+            }
+        else
+            if (!isValidRA(ra)){
+                Toast.makeText(this, "Digite um RA válido", Toast.LENGTH_SHORT).show()
+                return
+            }
+        else
+            if ( photoBitmap == null){
+                Toast.makeText(this, "Tire uma foto", Toast.LENGTH_SHORT).show()
+                return
+            }
+
         if (currentLocation != null) {
-            val qrCodeMessage = qrCodeTextView.text.toString()
-            val ra = raEditText.text.toString()
             val data = SubmissionData(qrCodeMessage, ra, currentLocation!!, qrCodeBitmap, photoBitmap)
             val intent = Intent(this, SecondActivity::class.java)
             intent.putExtra("submissionData", data)
             startActivity(intent)
         } else {
-            Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Localização não disponível", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun isValidRA(ra: String): Boolean {
+        val regex = Regex("^[0-9]{5}$")
+        return regex.matches(ra)
     }
 
     override fun onRequestPermissionsResult(
@@ -144,7 +171,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "Location permission denied. Cannot access current location.",
+                    "Permissão de Locaização negada",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -157,10 +184,10 @@ class MainActivity : AppCompatActivity() {
             val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
             if (result != null) {
                 if (result.contents == null) {
-                    Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
                 } else {
                     qrCodeTextView.text = result.contents
-                    Toast.makeText(this, "Scanned: ${result.contents}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Escaneado: ${result.contents}", Toast.LENGTH_SHORT).show()
                 }
             }
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -169,8 +196,6 @@ class MainActivity : AppCompatActivity() {
             // Aqui você pode usar a imagem capturada
         }
     }
-
-
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
