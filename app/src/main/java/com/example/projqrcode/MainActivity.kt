@@ -22,6 +22,15 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
+import com.example.projqrcode.databinding.ActivityMainBinding
+import com.google.gson.Gson
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private lateinit var qrCodeImageView: ImageView
@@ -133,16 +142,16 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Digite o RA", Toast.LENGTH_SHORT).show()
                 return
             }
-        else
-            if (!isValidRA(ra)){
-                Toast.makeText(this, "Digite um RA válido", Toast.LENGTH_SHORT).show()
-                return
-            }
-        else
-            if ( photoBitmap == null){
-                Toast.makeText(this, "Tire uma foto", Toast.LENGTH_SHORT).show()
-                return
-            }
+            else
+                if (!isValidRA(ra)){
+                    Toast.makeText(this, "Digite um RA válido", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                else
+                    if ( photoBitmap == null){
+                        Toast.makeText(this, "Tire uma foto", Toast.LENGTH_SHORT).show()
+                        return
+                    }
 
         if (currentLocation != null) {
             val data = SubmissionData(qrCodeMessage, ra, currentLocation!!, qrCodeBitmap, photoBitmap)
